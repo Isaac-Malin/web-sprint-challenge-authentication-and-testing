@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const User = require('./auth-model')
 const jwt = require('jsonwebtoken')
+const { validUsernameAndPassword } = require('../middleware/restricted')
 const bcrypt = require('bcryptjs')
 
-router.post('/register', (req, res, next) => {
+router.post('/register', validUsernameAndPassword, (req, res, next) => {
   const { username, password } = req.body
   const hashedPassword = bcrypt.hashSync(password, 8)
 

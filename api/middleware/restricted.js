@@ -37,9 +37,12 @@ const validUsernameAndPassword = async (req, res, next) => {
     next({ status: 401, message: 'username taken'})
   } else if (!username || !password) {
     next({ status: 401, message: 'username and password required'})
+  } else {
+    next()
   }
 }
 
 module.exports = {
-  restricted
+  restricted,
+  validUsernameAndPassword
 }
