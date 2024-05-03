@@ -10,11 +10,7 @@ router.post('/register', validUsernameAndPassword, (req, res, next) => {
 
   User.add({ username, password: hashedPassword })
     .then(user => {
-      if (!username || !password) {
-        next({status: 401, message: "username and password required"})
-      } else {
         res.status(201).json(user)
-      }
     })
     .catch(err => {
       next(err)
