@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken')
-const User = require('../auth/auth-model')
+const jwt = require("jsonwebtoken");
+const User = require("../auth/auth-model");
 /*
     IMPLEMENT
 
@@ -30,30 +30,30 @@ const restricted = (req, res, next) => {
 };
 
 const validUsernameAndPassword = async (req, res, next) => {
-  const { username, password } = req.body
+  const { username, password } = req.body;
+  const existing = await User.findBy({ username });
 
-  const existing = await User.findBy({ username })
-  if(existing) {
-    next({ status: 401, message: 'username taken'})
-  } else if (!username || !password ) {
-    next({ status: 401, message: 'username and password required'}) 
-  }  else {
-    next()
+  if (existing) {
+    next({ status: 400, message: "username taken" });
+  } else if (!username || !password) {
+    next({ status: 400, message: "username and password required" });
+  } else {
+    next();
   }
-}
+};
 
 const validateCredentials = (req, res, next) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    res.status(400).json({ message: 'username and password required' });
+    res.status(400).json({ message: "username and password required" });
   } else {
     next();
   }
-}
+};
 
 module.exports = {
   restricted,
   validUsernameAndPassword,
-  validateCredentials
-}
+  validateCredentials,
+};
