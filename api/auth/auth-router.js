@@ -57,6 +57,10 @@ router.post('/login', async (req, res, next) => {
       const existing = await User.findBy({ username })
       if (!existing) {
         next({status: 401, message: 'invalid credentials'})
+      } else if (!bcrypt.compareSync(password, user.password)) {
+        next({ status: 401, message: 'invalid credentials'})
+      } else {
+        next()
       }
     }
   } catch(err) {
