@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const User = require('./auth-model')
 const jwt = require('jsonwebtoken')
-const { validUsernameAndPassword } = require('../middleware/restricted')
+const { validUsernameAndPassword, validateCredentials } = require('../middleware/restricted')
 const bcrypt = require('bcryptjs')
 
 router.post('/register', validUsernameAndPassword, (req, res, next) => {
@@ -46,7 +46,7 @@ router.post('/register', validUsernameAndPassword, (req, res, next) => {
   */
 });
 
-router.post('/login', validUsernameAndPassword, async (req, res, next) => {
+router.post('/login', validateCredentials, async (req, res, next) => {
   const { username, password } = req.body
 
   try {
@@ -61,8 +61,6 @@ router.post('/login', validUsernameAndPassword, async (req, res, next) => {
       const existing = await User.findBy({ username })
       if (!existing) {
         next({status: 401, message: 'invalid credentials'})
-      } else if (!bcrypt.compareSync(password, user.password)) {
-        next({ status: 401, message: 'invalid credentials'})
       } else {
         next()
       }
