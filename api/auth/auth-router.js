@@ -59,7 +59,7 @@ router.post('/login', validateCredentials, async (req, res, next) => {
       })
     } else {
       const existing = await User.findBy({ username })
-      if (!existing) {
+      if (!existing || !bcrypt.compareSync(password, user.password)) {
         next({status: 401, message: 'invalid credentials'})
       } else {
         next()
