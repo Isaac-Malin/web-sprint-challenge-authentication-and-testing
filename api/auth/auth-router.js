@@ -52,6 +52,11 @@ router.post('/login', async (req, res, next) => {
         message: `welcome, ${user.username}`,
         token
       })
+    } else {
+      const existing = await User.findBy({ username })
+      if (!existing) {
+        next({status: 401, message: 'invalid credentials'})
+      }
     }
   } catch(err) {
     next(err)
