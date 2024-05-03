@@ -31,14 +31,17 @@ const restricted = (req, res, next) => {
 
 const validUsernameAndPassword = async (req, res, next) => {
   const { username, password } = req.body;
-  const existing = await User.findBy({ username });
 
-  if (existing) {
-    next({ status: 400, message: "username taken" });
-  } else if (!username || !password) {
+  if (!username || !password) {
     next({ status: 400, message: "username and password required" });
   } else {
-    next();
+    const existing = await User.findBy({ username });
+
+    if (existing) {
+      next({ status: 400, message: "username taken" });
+    } else {
+      next();
+    }
   }
 };
 
