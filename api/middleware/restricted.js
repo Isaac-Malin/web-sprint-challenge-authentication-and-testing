@@ -35,7 +35,7 @@ const validUsernameAndPassword = async (req, res, next) => {
   const existing = await User.findBy({ username })
   if(existing) {
     next({ status: 401, message: 'username taken'})
-  } else if (!username || !password) {
+  } else if ((!username || !password) || (!username && !password)) {
     next({ status: 401, message: 'username and password required'})
   } else {
     next()
